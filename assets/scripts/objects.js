@@ -1,22 +1,50 @@
-const movieList = document.getElementById('movie-list');
+const addMovieBtn = document.getElementById('add-movie-btn');
+const searchBtn = document.getElementById('search-btn');
 
-movieList.style.backgroundColor = 'red';
-movieList.style.display = 'block';
+const movies = [];
 
-let person = {
-  'first name': 'Blazej',
-  age: 30,
-  hobbies: ['motorcycles', 'business'],
-  greet: function() {
-    alert('hi there!');
+const renderMovies = () => {
+  const movieList = document.getElementById('movie-list');
+
+  if (movies.length === 0) {
+    movieList.classList.remove('visible');
+    return;
+  } else {
+    movieList.classList.add('visible');
   }
+  movieList.innerHTML = '';
+
+  movies.forEach((movie) => {
+    const movieEl = document.createElement('li');
+    movieEl.textContent = movie.info.title;
+    movieList.append(movieEl);  
+  });
 };
 
-// ...
-// person.age = 31;
-// person.age = undefined;
-// person.age = null;
-person.isAdmin = true;
-delete person.age;
+const addMovieHandler = () => {
+  const title = document.getElementById('title').value;
+  const extraName = document.getElementById('extra-name').value;
+  const extraValue = document.getElementById('extra-value').value;
 
-console.log(person['first name']);
+  if (
+    title.trim() === '' ||
+    extraName.trim() === '' ||
+    extraValue.trim() === ''
+  ) {
+    return;
+  }
+
+  const newMovie = {
+    info: {
+      title,
+      [extraName]: extraValue
+    },
+    id: Math.random()
+  };
+
+  movies.push(newMovie);
+  renderMovies();
+};
+
+
+addMovieBtn.addEventListener('click', addMovieHandler);
